@@ -1,0 +1,36 @@
+<script src="https://cdn.netpie.io/microgear.js"></script>
+<script>
+	const APPID = "COFEN";
+	const KEY = "eVQoizbDBJIXpB5"; //Session Key
+	const SECRET = "BArlWPl1eH30Vgdj5Aur76umL";
+	const ALIAS = "TestSwitch";
+var microgear = Microgear.create({
+	key: KEY,
+	secret: SECRET,
+	alias : ALIAS
+	});
+function toggle() {
+	if(document.getElementById("button").innerText=="off"){
+		microgear.chat('TestSwitch','1');
+	} else{
+		microgear.chat('TestSwitch','0');
+	}
+}
+ microgear.on('message',function(topic,msg) {
+	document.getElementById("data").innerHTML = msg;
+	if(msg=="1"){
+		document.getElementById("button").innerText="on";
+		}else if(msg=="0"){
+			document.getElementById("button").innerText="off";
+		}
+	});
+	microgear.on('connected', function() {
+		microgear.setAlias(ALIAS);
+		document.getElementById("data").innerHTML = "Now I am connected with netpie...";
+	});
+microgear.connect(APPID);
+</script>
+<div id="data">_____</div>
+<center>
+<button onclick="toggle()" id="button">off</button>
+</center>
