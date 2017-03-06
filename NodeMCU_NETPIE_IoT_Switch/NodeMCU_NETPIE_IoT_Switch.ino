@@ -3,8 +3,8 @@
 #include <ESP8266WiFi.h>
 #include <MicroGear.h>
 
-const char* ssid     = "Apple TV"; //your ssid
-const char* password = "APPLE_TV"; //your password
+const char* ssid     = "vaseline"; //your ssid
+const char* password = "mmm02333"; //your password
 
 #define APPID   "COFEN" //your AppID
 #define KEY     "pjdeqj4XylKD7LI" //your Key (Device Key)
