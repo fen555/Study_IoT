@@ -29,6 +29,8 @@ void onMsghandler(char *topic, uint8_t* msg, unsigned int msglen) {
         digitalWrite(D1, HIGH); // LED off
         microgear.chat("switch","0");
     }
+
+    
 }
 
 /* When a microgear is connected, do this */

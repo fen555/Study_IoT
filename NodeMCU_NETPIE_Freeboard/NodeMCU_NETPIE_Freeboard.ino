@@ -2,12 +2,12 @@
 #include <ESP8266WiFi.h> 
 #include <MicroGear.h>
 
-const char* ssid = "825"; 
-const char* password = "037213373";
+const char* ssid = "vaseline"; 
+const char* password = "mmm02333";
 
-#define APPID "FITM" 
-#define KEY "DtJLj9CzfSRXS4a" 
-#define SECRET "3mhk8iRwOYube8ztI6cI2IlM4"
+#define APPID "COFEN" 
+#define KEY "pjdeqj4XylKD7LI" //device key แต่ในเว็บ netpie ใช้ session key
+#define SECRET "vTxlt4B4shgvDsvvXBmvM0ieQ"
 #define ALIAS "piedht"
 WiFiClient client;
 int timer = 0; 
@@ -58,13 +58,16 @@ void loop() {
       if (timer >= 1000) {
           humid = dht.readHumidity();
           temp = dht.readTemperature();
+          Serial.println(humid);
+          Serial.println(temp);
           sprintf(str,"%d,%d",humid,temp);
           Serial.println(str);
           Serial.println("Sending --> "); 
+
           microgear.publish("/dht",str);
           timer = 0;
       }
-      else timer += 100;
+      else timer += 500;
   }
   else { 
     Serial.println("connection lost, reconnect...");
