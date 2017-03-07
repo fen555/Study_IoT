@@ -66,6 +66,9 @@ void loop() {
     url += t;
     url += "&field2=";
     url += h;
+    url += "&field3=";
+    url += (t - ((100-h)/5));
+    
 
     DEBUG_PRINT("Requesting URL: ");
     DEBUG_PRINTLN(url);
