@@ -1,9 +1,23 @@
+#define BLYNK_PRINT Serial    // Comment this out to disable prints and save space
 #include <ESP8266WiFi.h>
+#include <BlynkSimpleEsp8266.h>
+#include <SimpleTimer.h>
+
+#include <Adafruit_Sensor.h>
 #include <DHT.h>
-#define DHTPIN D1
-#define DHTTYPE DHT22
+#include <DHT_U.h>
+
+#define DHTPIN            2   
+#define DHTTYPE           DHT22
 DHT dht(DHTPIN, DHTTYPE, 15);
 #define ledPin1 D4
+
+//DHT_Unified dht(D4, DHT22);
+
+char auth[] = "d8a07025c5e3496e84bae6aa9b7e9091"; // CHANGEEEEEEEEEEEEEEEEEEEEEEEE
+
+SimpleTimer timer;
+
 const char* ssid = "vaseline";
 const char* password = "mmm02333";
 static const char* host = "api.thingspeak.com";
@@ -13,6 +27,7 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
   Serial.println("DHT Test");
+  Blynk.begin(auth, "vaseline", "mmm02333");
   dht.begin();
   delay(10);
   pinMode(ledPin1, OUTPUT);
@@ -22,6 +37,7 @@ void setup() {
   Serial.println(ssid);
 
   WiFi.begin(ssid, password);
+  timer.setInterval(5000L, sendUptime);
 
   while(WiFi.status() != WL_CONNECTED){
     delay(500);
@@ -35,8 +51,27 @@ void setup() {
   
   
 }
+void sendUptime()
+{
+  Blynk.virtualWrite(V5, millis() / 1000);
+  sensors_event_t event;  
+  dht.temperature().getEvent(&event);
+  if (!isnan(event.temperature)) {
+    Blynk.virtualWrite(V1, event.temperature);
+    Serial.print(event.temperature);//
+    Serial.print("\t");
+  }
+  dht.humidity().getEvent(&event);
+  if (!isnan(event.relative_humidity)) {
+    Blynk.virtualWrite(V2, event.relative_humidity);
+    Serial.println(event.relative_humidity);
+  }
+  
+}
 
 void loop() {
+  Blynk.run();
+  timer.run();
   // put your main code here, to run repeatedly:
   float h = dht.readHumidity();
   float t = dht.readTemperature();
